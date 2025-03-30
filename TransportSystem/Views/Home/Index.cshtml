@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Transport List";
+}
+
+<h2>Transport List</h2>
+
+<!-- Search Form by Type -->
+<input type="text" id="searchType" placeholder="Enter transport type" />
+<button onclick="searchTransport()">Search</button>
+
+<!-- Transport Table -->
+<table border="1" id="transportTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Capacity</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2>Add Transport</h2>
+<input type="text" id="transportName" placeholder="Name" />
+<input type="text" id="transportType" placeholder="Type" />
+<input type="number" id="transportCapacity" placeholder="Capacity" />
+<button onclick="addTransport()">Add</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadTransport(); // load transport on page open
+    });
+
+    function loadTransport() {
+        $.get("/api/Transport", function (data) {
+            var rows = "";
+            data.forEach(function (item) {
+                rows += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.type}</td>
+                            <td>${item.capacity}</td>
+                         </tr>`;
+            });
+            $("#transportTable tbody").html(rows);
+        });
+    }
+
+    function addTransport() {
+        var transport = {
+            name: $("#transportName").val(),
+            type: $("#transportType").val(),
+            capacity: parseInt($("#transportCapacity").val())
+        };
+
+        $.ajax({
+            url: "/api/Transport",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(transport),
+            success: function () {
+                loadTransport(); 
+                $("#transportName").val("");
+                $("#transportType").val("");
+                $("#transportCapacity").val("");
+            }
+        });
+    }
+        function searchTransport() {
+        var type = $("#searchType").val(); // Get the value from the input field
+        if (type.trim() === "") {
+            alert("Please enter a transport type.");
+            return;
+        }
+
+        $.get(`/api/Transport/search?type=${type}`, function (data) {
+            var rows = "";
+            data.forEach(function (item) {
+                rows += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.type}</td>
+                            <td>${item.capacity}</td>
+                         </tr>`;
+            });
+            $("#transportTable tbody").html(rows); // Update the table with search results
+        }).fail(function () {
+            alert("Failed to find transport with that type.");
+        });
+    }
+</script>
