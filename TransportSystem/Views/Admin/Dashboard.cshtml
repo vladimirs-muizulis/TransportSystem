@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Transport List";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="page-title">Transport List</h1>
+
+        <!-- Search Form by Type -->
+        <div class="search-section">
+            <input type="text" id="searchType" class="input-field" placeholder="Enter transport type" />
+            <button onclick="searchTransport()" class="btn">Search</button>
+        </div>
+
+        <!-- Transport Table -->
+        <div class="table-section">
+            <table id="transportTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Capacity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <h2 class="add-transport-title">Add Transport</h2>
+
+        <!-- Add Transport Form -->
+        <div class="add-transport-section">
+            <input type="text" id="transportName" class="input-field" placeholder="Name" />
+            <input type="text" id="transportType" class="input-field" placeholder="Type" />
+            <input type="number" id="transportCapacity" class="input-field" placeholder="Capacity" />
+            <button onclick="addTransport()" class="btn">Add</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadTransport(); // load transport on page open
+        });
+
+        function loadTransport() {
+            $.get("/api/Transport", function (data) {
+                var rows = "";
+                data.forEach(function (item) {
+                    rows += `<tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.type}</td>
+                                <td>${item.capacity}</td>
+                             </tr>`;
+                });
+                $("#transportTable tbody").html(rows);
+            });
+        }
+
+        function addTransport() {
+            var transport = {
+                name: $("#transportName").val(),
+                type: $("#transportType").val(),
+                capacity: parseInt($("#transportCapacity").val())
+            };
+
+            $.ajax({
+                url: "/api/Transport",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(transport),
+                success: function () {
+                    loadTransport();
+                    $("#transportName").val("");
+                    $("#transportType").val("");
+                    $("#transportCapacity").val("");
+                }
+            });
+        }
+
+        function searchTransport() {
+            var type = $("#searchType").val(); // Get the value from the input field
+            if (type.trim() === "") {
+                alert("Please enter a transport type.");
+                return;
+            }
+
+            $.get(`/api/Transport/search?type=${type}`, function (data) {
+                var rows = "";
+                data.forEach(function (item) {
+                    rows += `<tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.type}</td>
+                                <td>${item.capacity}</td>
+                             </tr>`;
+                });
+                $("#transportTable tbody").html(rows); // Update the table with search results
+            }).fail(function () {
+                alert("Failed to find transport with that type.");
+            });
+        }
+    </script>
+
+</body>
+</html>Admins can see this page.</p>
