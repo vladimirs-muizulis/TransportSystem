@@ -2,14 +2,29 @@
     ViewData["Title"] = "Transport List";
 }
 
-<h2>Transport List</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="~/wwwroot/styles.css" />
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="page-title">Transport List</h1>
 
 <!-- Search Form by Type -->
-<input type="text" id="searchType" placeholder="Enter transport type" />
-<button onclick="searchTransport()">Search</button>
+        <div class="search-section">
+            <input type="text" id="searchType" class="input-field" placeholder="Enter transport type" />
+            <button onclick="searchTransport()" class="btn">Search</button>
+        </div>
 
 <!-- Transport Table -->
-<table border="1" id="transportTable">
+        <div class="table-section">
+            <table id="transportTable">
     <thead>
         <tr>
             <th>ID</th>
@@ -20,12 +35,18 @@
     </thead>
     <tbody></tbody>
 </table>
+        </div>
 
-<h2>Add Transport</h2>
-<input type="text" id="transportName" placeholder="Name" />
-<input type="text" id="transportType" placeholder="Type" />
-<input type="number" id="transportCapacity" placeholder="Capacity" />
-<button onclick="addTransport()">Add</button>
+        <h2 class="add-transport-title">Add Transport</h2>
+
+        <!-- Add Transport Form -->
+        <div class="add-transport-section">
+            <input type="text" id="transportName" class="input-field" placeholder="Name" />
+            <input type="text" id="transportType" class="input-field" placeholder="Type" />
+            <input type="number" id="transportCapacity" class="input-field" placeholder="Capacity" />
+            <button onclick="addTransport()" class="btn">Add</button>
+        </div>
+    </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -68,6 +89,7 @@
             }
         });
     }
+
         function searchTransport() {
         var type = $("#searchType").val(); // Get the value from the input field
         if (type.trim() === "") {
@@ -91,3 +113,6 @@
         });
     }
 </script>
+
+</body>
+</html>
