@@ -6,8 +6,10 @@ using TransportSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adding In-Memory Database for the application (using in-memory storage for transport data)
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("TransportDB"));
+// Adding Local Database for the application (using in-memory storage for transport data)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=TransportDb.db"));
+
 
 // Adding support for sessions
 builder.Services.AddDistributedMemoryCache(); // Using memory-based cache to store session data
