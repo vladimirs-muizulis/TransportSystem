@@ -49,5 +49,37 @@ namespace TransportSystem.Controllers
             return Ok(transports);
         }
 
+        // PUT: api/Transport/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTransport(int id, [FromBody] Transport transport)
+        {
+            if (id != transport.Id)
+                return BadRequest("ID mismatch");
+
+            var existingTransport = await _db.Transports.FindAsync(id);
+            if (existingTransport == null)
+                return NotFound();
+
+            existingTransport.Name = transport.Name;
+            existingTransport.Type = transport.Type;
+            existingTransport.Capacity = transport.Capacity;
+
+            await _db.SaveChangesAsync();
+            return Ok(existingTransport);
+        }
+
+        // DELETE: api/Transport/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTransport(int id)
+        {
+            var transport = await _db.Transports.FindAsync(id);
+            if (transport == null)
+                return NotFound();
+
+            _db.Transports.Remove(transport);
+            await _db.SaveChangesAsync();
+            return NoContent(); // 204 No Content
+        }
+
     }
 }
