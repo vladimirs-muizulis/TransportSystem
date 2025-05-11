@@ -1,8 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using TransportSystem.Data; 
+using TransportSystem.Models; 
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class AdminController : Controller
 {
+    private readonly AppDbContext _dbContext;
+
+    public AdminController(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public IActionResult Dashboard()
     {
         var role = HttpContext.Session.GetString("Role");
@@ -13,4 +25,5 @@ public class AdminController : Controller
 
         return View();
     }
+
 }

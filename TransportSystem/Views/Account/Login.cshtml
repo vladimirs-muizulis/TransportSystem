@@ -2,8 +2,7 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
-
+<link rel="stylesheet" href="/css/login.css">
 <form method="post">
     <div>
         <label for="username">Username</label>
@@ -16,7 +15,3 @@
     <button type="submit">Login</button>
 </form>
 
-@if (ViewBag.ErrorMessage != null)
-{
-    <p style="color:red;">@ViewBag.ErrorMessage</p>
-}

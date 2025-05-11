@@ -6,21 +6,22 @@ namespace TransportSystem.Controllers
     {
         public IActionResult Index()
         {
-            // Проверка, существует ли сессионная переменная "Username"
+            // Check if the session variable "Username" exists
             var username = HttpContext.Session.GetString("Username");
 
             if (string.IsNullOrEmpty(username))
             {
-                // Если переменная "Username" отсутствует в сессии, перенаправляем на страницу входа
+                // If "Username" is not found in the session, redirect to the login page
                 return RedirectToAction("Login", "Account");
             }
 
-            // Получаем роль пользователя из сессии
+            // Get the user's role from the session
             var role = HttpContext.Session.GetString("Role");
-            ViewData["Role"] = role;  // Передаем роль в View
+            ViewData["Role"] = role;  // Pass the role to the View
 
-            // Если пользователь авторизован, возвращаем представление из папки "User"
-            return View("~/Views/User/TransportList.cshtml");  // Правильный путь к представлению
+            // If the user is authenticated, return the view from the "User" folder
+            return View("~/Views/User/TransportList.cshtml");  // Correct path to the view
         }
     }
 }
+
